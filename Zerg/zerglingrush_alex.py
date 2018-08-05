@@ -15,27 +15,23 @@ class ZergRushBot(sc2.BotAI):
         self.queeen_started = False
         self.mboost_started = False
 
-    async def on_step(self, iteration):
+    async def glhf(self, iteration):
         if iteration == 0:
             await self.chat_send("(glhf)")
 
-        if not self.units(HATCHERY).ready.exists:
-            for unit in self.workers | self.units(ZERGLING) | self.units(QUEEN):
-                await self.do(unit.attack(self.enemy_start_locations[0]))
-            return
-
-        hatchery = self.units(HATCHERY).ready.first
-        larvae = self.units(LARVA)
-
+    async def attack_with_zerglings(self):
         target = self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
         for zl in self.units(ZERGLING).idle:
             await self.do(zl.attack(target))
 
+    async def inject(self):
+        hatchery = self.units(HATCHERY).ready.first
         for queen in self.units(QUEEN).idle:
             abilities = await self.get_available_abilities(queen)
             if AbilityId.EFFECT_INJECTLARVA in abilities:
                 await self.do(queen(EFFECT_INJECTLARVA, hatchery))
 
+    async def research_metabolicboost(self):
         if self.vespene >= 100:
             sp = self.units(SPAWNINGPOOL).ready
             if sp.exists and self.minerals >= 100 and not self.mboost_started:
@@ -48,32 +44,48 @@ class ZergRushBot(sc2.BotAI):
                     m = self.state.mineral_field.closer_than(10, drone.position)
                     await self.do(drone.gather(m.random, queue=True))
 
-        if self.supply_left < 2:
-            if self.can_afford(OVERLORD) and larvae.exists:
-                await self.do(larvae.random.train(OVERLORD))
+    async def build_overlord(self):
+        if (self.supply_used == self.supply_cap-2):
+            if self.can_afford(OVERLORD) and self.units(LARVA).exists:
+                await self.do(self.units(LARVA).random.train(OVERLORD))
 
+    async def build_zergling(self):
         if self.units(SPAWNINGPOOL).ready.exists:
-            if larvae.exists and self.can_afford(ZERGLING):
-                await self.do(larvae.random.train(ZERGLING))
+            if self.units(LARVA).exists and self.can_afford(ZERGLING):
+                await self.do(self.units(LARVA).random.train(ZERGLING))
 
+    async def build_drone(self):
+        if self.drone_counter < 3:
+            if self.can_afford(DRONE):
+                self.drone_counter += 1
+                await self.do(self.units(LARVA).random.train(DRONE))
+
+    async def build_hatch(self):
+        if self.minerals > 300:
+            self.expand_now()
+            #hatchery = self.units(HATCHERY).ready.first
+            # for d in range(4, 15):
+            #     pos = hatchery.position.to2.towards(self.game_info.map_center, d)
+            #     if await self.can_place(HATCHERY, pos):
+            #         self.spawning_pool_started = True
+            #         await self.do(self.workers.random.build(HATCHERY, pos))
+            #         break
+
+    async def move_drones_to_gas(self):
         if self.units(EXTRACTOR).ready.exists and not self.moved_workers_to_gas:
             self.moved_workers_to_gas = True
             extractor = self.units(EXTRACTOR).first
             for drone in self.workers.random_group_of(3):
                 await self.do(drone.gather(extractor))
 
-        if self.minerals > 500:
-            for d in range(4, 15):
-                pos = hatchery.position.to2.towards(self.game_info.map_center, d)
-                if await self.can_place(HATCHERY, pos):
-                    self.spawning_pool_started = True
-                    await self.do(self.workers.random.build(HATCHERY, pos))
-                    break
+    async def all_in(self):
+        if not self.units(HATCHERY).ready.exists:
+            for unit in self.workers | self.units(ZERGLING) | self.units(QUEEN):
+                await self.do(unit.attack(self.enemy_start_locations[0]))
+            return
 
-        if self.drone_counter < 3:
-            if self.can_afford(DRONE):
-                self.drone_counter += 1
-                await self.do(larvae.random.train(DRONE))
+    async def build_queens(self):
+        hatchery = self.units(HATCHERY).ready.first
 
         if not self.extractor_started:
             if self.can_afford(EXTRACTOR):
@@ -100,11 +112,26 @@ class ZergRushBot(sc2.BotAI):
                 if not r:
                     self.queeen_started = True
 
+
+    async def on_step(self, iteration):
+        await self.glhf(iteration)
+        await self.attack_with_zerglings()
+        await self.inject()
+        await self.research_metabolicboost()
+        await self.build_overlord()
+        await self.build_zergling()
+        await self.build_drone()
+        await self.move_drones_to_gas()
+        await self.build_hatch()
+        await self.all_in()
+        await self.build_queens()
+        
+
 def main():
     sc2.run_game(sc2.maps.get("(2)CatalystLE"), [
         Bot(Race.Zerg, ZergRushBot()),
         Computer(Race.Terran, Difficulty.Medium)
-    ], realtime=False
+    ], realtime=True
     #, save_replay_as="ZvT.SC2Replay"
     )
 
