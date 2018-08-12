@@ -1,6 +1,6 @@
+import lib
 from lib import zerg_lib
 from lib import common_lib
-
 
 import random
 
@@ -32,14 +32,24 @@ class ZergRushBot(sc2.BotAI):
         await zerg_lib.move_drones_to_gas(self)
         await zerg_lib.build_hatch(self)
         await zerg_lib.all_in(self)
-        await zerg_lib.build_queens(self)
+        await self.starter_build()
 
+
+    async def starter_build(self):
+        if not self.extractor_started:
+            await zerg_lib.build_extractors(self)
+
+        elif not self.spawning_pool_started:
+            await zerg_lib.build_spawningpool(self)
+
+        elif not self.queeen_started and self.units(SPAWNINGPOOL).ready.exists:
+            await zerg_lib.build_queen(self)
 
 def main():
     sc2.run_game(sc2.maps.get("(2)CatalystLE"), [
         Bot(Race.Zerg, ZergRushBot()),
         Computer(Race.Terran, Difficulty.Medium)
-    ], realtime=False
+    ], realtime=True
     #, save_replay_as="ZvT.SC2Replay"
     )
 
