@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+src/sc2lib/
 lib64/
 parts/
 sdist/
