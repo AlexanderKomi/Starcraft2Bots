@@ -5,7 +5,3 @@ def find_target(self, iteration):
 async def glhf(self, iteration):
     if iteration == 0:
         await self.chat_send("(glhf)")
-
-
-if __name__ == "__main__":
-    pass

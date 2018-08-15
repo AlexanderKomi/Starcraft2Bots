@@ -10,7 +10,7 @@ from sc2lib.downloadedmaps import *
 def main():
     sc2.run_game(sc2.maps.get(DownloadedMaps().AcidPlant), [
         Bot(Race.Zerg, ZergRushBot()),
-        Computer(Race.Terran, Difficulty.Medium)
+        Computer(Race.Terran, Difficulty.Easy)
     ], realtime=False
                  # , save_replay_as="ZergRushBot_ZvT.SC2Replay"
                  )
