@@ -8,7 +8,7 @@ async def build_zergling(self):
 
 
 async def build_overlord(self):
-    if (self.supply_used >= self.supply_cap - 2):
+    if self.supply_used >= self.supply_cap - 2:
         if self.can_afford(Units.OVERLORD) and self.units(Units.LARVA).exists:
             await self.do(self.units(Units.LARVA).random.train(Units.OVERLORD))
 
