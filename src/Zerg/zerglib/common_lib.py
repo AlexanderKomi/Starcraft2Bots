@@ -1,4 +1,4 @@
-def find_target(self, iteration):
+def find_target(self):
     return self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
 
 
