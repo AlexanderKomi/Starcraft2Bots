@@ -3,8 +3,9 @@ from sc2.ids.unit_typeid import UnitTypeId as Units
 
 async def build_zergling(self):
     if self.units(Units.SPAWNINGPOOL).ready.exists:
-        if self.units(Units.LARVA).exists and self.can_afford(Units.ZERGLING):
-            await self.do(self.units(Units.LARVA).random.train(Units.ZERGLING))
+        if self.units(Units.LARVA).exists:
+            if self.can_afford(Units.ZERGLING):
+                await self.do(self.units(Units.LARVA).random.train(Units.ZERGLING))
 
 
 async def build_overlord(self):
@@ -13,8 +14,9 @@ async def build_overlord(self):
 
 
 async def build_drone(self):
-    if self.can_afford(Units.DRONE):
-        await self.do(self.units(Units.LARVA).random.train(Units.DRONE))
+    if self.units(Units.LARVA).exists:
+        if self.can_afford(Units.DRONE):
+            await self.do(self.units(Units.LARVA).random.train(Units.DRONE))
 
 
 async def build_queen(self):

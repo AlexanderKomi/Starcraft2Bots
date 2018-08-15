@@ -1,5 +1,6 @@
 def find_target(self):
-    return self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
+    # return self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
+    return self.known_enemy_units.random_or(self.enemy_start_locations[0]).position
 
 
 async def glhf(self, iteration=0):

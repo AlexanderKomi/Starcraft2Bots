@@ -27,7 +27,7 @@ class ZergRushBot(sc2.BotAI):
             if self.drone_counter > 1:
                 await zerg_lib.build_extractors(self)
         elif not self.spawning_pool_started:
-            await zerg_lib.build_spawningpool(self)
+            self.spawning_pool_started = await zerg_lib.build_spawningpool(self)
         elif not self.queeen_started and self.units(Units.SPAWNINGPOOL).ready.exists and self.mboost_started:
             await zerg_lib.build_queen(self)
         await self.attack()
@@ -59,7 +59,8 @@ class ZergRushBot(sc2.BotAI):
                     self.drone_counter += 1
 
     async def buildings(self):
-        await zerg_lib.build_hatch(self)
+        if self.mboost_started and not self.units(Units.LARVA).exists:
+            await zerg_lib.build_hatch(self)
 
     async def research(self):
         await zerg_lib.research_metabolicboost(self)

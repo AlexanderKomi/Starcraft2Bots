@@ -19,8 +19,9 @@ async def build_spawningpool(self):
                 drone = self.workers.closest_to(pos)
                 err = await self.do(drone.build(Units.SPAWNINGPOOL, pos))
                 if not err:
-                    self.spawning_pool_started = True
-                    break
+                    return True
+    else:
+        return False
 
 
 async def build_hatch(self):

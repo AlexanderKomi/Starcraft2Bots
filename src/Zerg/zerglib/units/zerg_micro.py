@@ -11,9 +11,8 @@ async def move_drones_to_gas(self):
 
 
 async def move_drones_from_gas(self):
-    if self.units(Units.EXTRACTOR).ready.exists:
-        if not self.moved_workers_from_gas:
-            self.moved_workers_from_gas = True
-            for drone in self.workers:
-                m = self.state.mineral_field.closer_than(10, drone.position)
-                await self.do(drone.gather(m.random, queue=True))
+    if not self.moved_workers_from_gas:
+        self.moved_workers_from_gas = True
+        for drone in self.workers:
+            m = self.state.mineral_field.closer_than(10, drone.position)
+            await self.do(drone.gather(m.random, queue=True))

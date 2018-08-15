@@ -60,4 +60,4 @@ async def build_extractors(self):
 
 
 async def build_spawningpool(self):
-    await buildings.build_spawningpool(self)
+    return await buildings.build_spawningpool(self)
