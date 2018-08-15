@@ -24,18 +24,16 @@ async def build_spawningpool(self):
 
 
 async def build_hatch(self):
-    if self.minerals >= 300:
-        if self.can_afford(Units.HATCHERY):
-            await self.expand_now()
+    if self.can_afford(Units.HATCHERY):
+        await self.expand_now()
 
 
 async def build_eco_hatch(self):
-    if self.minerals > 500:
-        if self.can_afford(Units.HATCHERY):
-            hatchery = self.units(Units.HATCHERY).ready.first
-            for d in range(4, 15):
-                pos = hatchery.position.to2.towards(self.game_info.map_center, d)
-                if await self.can_place(Units.HATCHERY, pos):
-                    self.spawning_pool_started = True
-                    await self.do(self.workers.random.build(Units.HATCHERY, pos))
-                    break
+    if self.can_afford(Units.HATCHERY):
+        hatchery = self.units(Units.HATCHERY).ready.first
+        for d in range(4, 15):
+            pos = hatchery.position.to2.towards(self.game_info.map_center, d)
+            if await self.can_place(Units.HATCHERY, pos):
+                self.spawning_pool_started = True
+                await self.do(self.workers.random.build(Units.HATCHERY, pos))
+                break

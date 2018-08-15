@@ -8,7 +8,7 @@ from sc2.player import \
 from Zerg.zergling_rush import ZergRushBot
 from sc2lib.downloadedmaps import *
 
-real_time = False
+real_time = True
 player_config = [
     # Human(Race.Zerg),
         Bot(Race.Zerg, ZergRushBot()),

@@ -24,29 +24,39 @@ class ZergRushBot(sc2.BotAI):
 
     async def starter_build(self):
         if not self.extractor_started:
-            await zerg_lib.build_extractors(self)
-
+            if self.drone_counter > 1:
+                await zerg_lib.build_extractors(self)
         elif not self.spawning_pool_started:
             await zerg_lib.build_spawningpool(self)
-
         elif not self.queeen_started and self.units(Units.SPAWNINGPOOL).ready.exists and self.mboost_started:
             await zerg_lib.build_queen(self)
-
         await self.attack()
         await self.build_units()
-        await self.research()
         await self.buildings()
+        await self.research()
         await zerg_lib.inject(self)
-        await zerg_lib.move_drones_to_gas(self)
         await zerg_lib.all_in(self)
 
     async def attack(self):
         await zerg_lib.attack_with_zerglings(self)
 
     async def build_units(self):
-        await zerg_lib.build_overlord(self)
-        await zerg_lib.build_zergling(self)
-        await zerg_lib.build_drone(self)
+        if self.mboost_started:
+            await zerg_lib.build_zergling(self)
+
+        if self.supply_used >= (self.supply_cap - 4):
+            if not self.already_pending(Units.OVERLORD):
+                await zerg_lib.build_overlord(self)
+
+        if self.drone_counter < 3:
+            if self.can_afford(Units.DRONE):
+                if self.supply_cap == 14:
+                    if self.already_pending(Units.OVERLORD):
+                        await zerg_lib.build_drone(self)
+                        self.drone_counter += 1
+                else:
+                    await zerg_lib.build_drone(self)
+                    self.drone_counter += 1
 
     async def buildings(self):
         await zerg_lib.build_hatch(self)

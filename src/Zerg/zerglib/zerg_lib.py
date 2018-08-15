@@ -16,9 +16,7 @@ async def attack_with_zerglings(self):
 
 
 async def move_drones_to_gas(self):
-    if not self.moved_workers_to_gas:
         await micro.move_drones_to_gas(self)
-        self.moved_workers_to_gas = True
 
 
 # ABILITIES
@@ -41,9 +39,7 @@ async def build_zergling(self):
 
 
 async def build_drone(self):
-    if self.drone_counter < 3:
-        await units.build_drone(self)
-        self.drone_counter += 1
+    await units.build_drone(self)
 
 
 async def build_queen(self):
