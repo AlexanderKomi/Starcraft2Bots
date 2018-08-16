@@ -1,8 +1,7 @@
 import sc2
 from sc2 import Race, Difficulty
 from sc2.player import \
-    Bot \
-    , Computer \
+    Bot, Computer \
     # ,Human
 
 from Zerg.zergling_rush import ZergRushBot
@@ -11,7 +10,7 @@ from sc2lib.downloadedmaps import *
 real_time = False
 player_config = [
     # Human(Race.Zerg),
-        Bot(Race.Zerg, ZergRushBot()),
+    Bot(Race.Zerg, ZergRushBot()),
     Computer(Race.Terran, Difficulty.Medium)
 ]
 

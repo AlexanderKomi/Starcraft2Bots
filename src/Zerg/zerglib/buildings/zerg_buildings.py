@@ -7,12 +7,13 @@ async def build_extractors(self):
         target = self.state.vespene_geyser.closest_to(drone.position)
         err = await self.do(drone.build(Units.EXTRACTOR, target))
         if not err:
-            self.extractor_started = True
+            return True
+    return False
 
 
 async def build_spawningpool(self):
-    hatchery = self.units(Units.HATCHERY).ready.first
     if self.can_afford(Units.SPAWNINGPOOL):
+        hatchery = self.units(Units.HATCHERY).ready.first
         for d in range(4, 15):
             pos = hatchery.position.to2.towards(self.game_info.map_center, d)
             if await self.can_place(Units.SPAWNINGPOOL, pos):
@@ -24,9 +25,26 @@ async def build_spawningpool(self):
         return False
 
 
+async def build_roachwarren(self):
+    if self.units(Units.SPAWNINGPOOL).exists:
+        if self.can_afford(Units.ROACHWARREN):
+            hatchery = self.units(Units.HATCHERY).ready.first
+            for d in range(4, 25):
+                pos = hatchery.position.to2.towards(self.game_info.map_center, d)
+                if await self.can_place(Units.ROACHWARREN, pos):
+                    drone = self.workers.closest_to(pos)
+                    err = await self.do(drone.build(Units.ROACHWARREN, pos))
+                    if not err:
+                        return True
+    else:
+        return False
+
+
 async def build_hatch(self):
     if self.can_afford(Units.HATCHERY):
         await self.expand_now()
+        return True
+    return False
 
 
 async def build_eco_hatch(self):
@@ -37,4 +55,5 @@ async def build_eco_hatch(self):
             if await self.can_place(Units.HATCHERY, pos):
                 self.spawning_pool_started = True
                 await self.do(self.workers.random.build(Units.HATCHERY, pos))
-                break
+                return True
+    return False

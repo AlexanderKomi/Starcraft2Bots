@@ -15,8 +15,13 @@ async def attack_with_zerglings(self):
     await attacks.attack_with_zerglings(self)
 
 
+# MICRO
 async def move_drones_to_gas(self):
-        await micro.move_drones_to_gas(self)
+    return await micro.move_drones_to_gas(self)
+
+
+async def move_drones_from_gas(self):
+    return await micro.move_drones_from_gas(self)
 
 
 # ABILITIES
@@ -26,7 +31,7 @@ async def inject(self):
 
 # RESEARCH
 async def research_metabolicboost(self):
-    await research.research_metabolicboost(self)
+    return await research.research_metabolicboost(self)
 
 
 # BUILD UNITS
@@ -35,28 +40,28 @@ async def build_overlord(self):
 
 
 async def build_zergling(self):
-    await units.build_zergling(self)
+    return await units.build_zergling(self)
 
 
 async def build_drone(self):
-    await units.build_drone(self)
+    return await units.build_drone(self)
 
 
 async def build_queen(self):
-    await units.build_queen(self)
+    return await units.build_queen(self)
 
 
 # BUILDINGS
 async def build_hatch(self):
-    await buildings.build_hatch(self)
+    return await buildings.build_hatch(self)
 
 
 async def build_eco_hatch(self):
-    await buildings.build_eco_hatch(self)
+    return await buildings.build_eco_hatch(self)
 
 
 async def build_extractors(self):
-    await buildings.build_extractors(self)
+    return await buildings.build_extractors(self)
 
 
 async def build_spawningpool(self):
