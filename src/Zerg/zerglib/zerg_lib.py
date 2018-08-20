@@ -40,7 +40,7 @@ async def build_overlord(self):
 
 
 async def build_efficiently_overlords(self):
-    return units.build_efficiently_overlords(self)
+    return await units.build_efficiently_overlords(self)
 
 
 async def build_zergling(self):

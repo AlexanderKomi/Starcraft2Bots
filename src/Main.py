@@ -4,7 +4,7 @@ from sc2.player import \
     Bot, Computer \
     # ,Human
 
-from Zerg.zergling_rush import ZergRushBot
+from Zerg.zergling_rush.zergling_rush import ZergRushBot
 from sc2lib.downloadedmaps import *
 
 real_time = False
