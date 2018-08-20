@@ -1,6 +1,6 @@
 from sc2.ids.unit_typeid import UnitTypeId as Units
 
-import Zerg.zerglib.common_lib as common_lib
+import sc2lib.common_lib as common_lib
 
 
 async def all_in(self):

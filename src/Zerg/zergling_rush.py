@@ -1,8 +1,8 @@
 import sc2
 from sc2.ids.unit_typeid import UnitTypeId as Units
 
-import Zerg.zerglib.common_lib as common_lib
 import Zerg.zerglib.zerg_lib as zerg_lib
+import sc2lib.common_lib as common_lib
 from Zerg.zerglib.units.zerg_micro import move_drones_from_gas
 from Zerg.zerglib.units.zerg_micro import move_drones_to_gas
 
@@ -44,9 +44,7 @@ class ZergRushBot(sc2.BotAI):
 
     async def drone_overlord_management(self):
         # Fancy 14 - Pool Drone management :D
-        if self.supply_left <= 4:  # Not too many Overlords
-            if not self.already_pending(Units.OVERLORD):
-                await zerg_lib.build_overlord(self)
+        await zerg_lib.build_efficiently_overlords(self)
 
         if self.drone_counter < 3:
             if self.supply_cap == 14:
