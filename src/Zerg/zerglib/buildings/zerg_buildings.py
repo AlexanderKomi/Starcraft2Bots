@@ -21,23 +21,22 @@ async def build_spawningpool(self):
                 err = await self.do(drone.build(Units.SPAWNINGPOOL, pos))
                 if not err:
                     return True
-    else:
-        return False
+    return False
 
 
 async def build_roachwarren(self):
-    if self.units(Units.SPAWNINGPOOL).exists:
-        if self.can_afford(Units.ROACHWARREN):
-            hatchery = self.units(Units.HATCHERY).ready.first
-            for d in range(4, 25):
-                pos = hatchery.position.to2.towards(self.game_info.map_center, d)
-                if await self.can_place(Units.ROACHWARREN, pos):
-                    drone = self.workers.closest_to(pos)
-                    err = await self.do(drone.build(Units.ROACHWARREN, pos))
-                    if not err:
-                        return True
-    else:
-        return False
+	if self.units( Units.SPAWNINGPOOL ).exists and not self.already_pending( Units.SPAWNINGPOOL ):
+		if not (self.units( Units.ROACHWARREN ).exists or self.already_pending( Units.ROACHWARREN )):
+			if self.can_afford( Units.ROACHWARREN ):
+				hatchery = self.units( Units.HATCHERY ).ready.first
+				for d in range( 6, 35 ):
+					pos = hatchery.position.to2.towards( self.game_info.map_center, d )
+					if await self.can_place( Units.ROACHWARREN, pos ):
+						drone = self.workers.closest_to( pos )
+						err = await self.do( drone.build( Units.ROACHWARREN, pos ) )
+						if not err:
+							return True
+	return False
 
 
 async def build_hatch(self):

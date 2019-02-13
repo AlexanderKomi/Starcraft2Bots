@@ -10,7 +10,15 @@ async def all_in(self):
         return
 
 
-async def attack_with_zerglings(self):
+async def _attack( self, unit ):
     target = common_lib.find_target(self)
-    for zl in self.units(Units.ZERGLING).idle:
+    for zl in self.units( unit ).idle:
         await self.do(zl.attack(target))
+
+
+async def attack_with_zerglings( self ):
+	return await _attack( self, Units.ZERGLING )
+
+
+async def attack_with_roaches( self ):
+	return await _attack( self, Units.ROACH )

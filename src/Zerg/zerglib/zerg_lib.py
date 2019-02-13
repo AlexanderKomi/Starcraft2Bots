@@ -15,6 +15,10 @@ async def attack_with_zerglings(self):
     await attacks.attack_with_zerglings(self)
 
 
+async def attack_with_roaches( bot ):
+	return await attacks.attack_with_roaches( bot )
+
+
 # MICRO
 async def move_drones_to_gas(self):
     return await micro.move_drones_to_gas(self)
@@ -32,6 +36,10 @@ async def inject(self):
 # RESEARCH
 async def research_metabolicboost(self):
     return await research.research_metabolicboost(self)
+
+
+async def research_gil( bot ):
+	return await research.research_gilclaws( bot )
 
 
 # BUILD UNITS
@@ -70,3 +78,4 @@ async def build_extractors(self):
 
 async def build_spawningpool(self):
     return await buildings.build_spawningpool(self)
+
